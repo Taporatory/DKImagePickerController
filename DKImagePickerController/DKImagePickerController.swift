@@ -233,6 +233,8 @@ open class DKImagePickerController : UINavigationController {
     
     public var selectedAssets = [DKAsset]()
     
+    public var cameraViewController: UIViewController?
+    
     public convenience init() {
         let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
@@ -406,6 +408,8 @@ open class DKImagePickerController : UINavigationController {
         cameraProtocol.setDidFinishCapturingImage(block: didFinishCapturingImage)
         cameraProtocol.setDidFinishCapturingVideo(block: didFinishCapturingVideo)
         
+        self.cameraViewController = camera
+        
         return camera
     }
     
@@ -413,7 +417,7 @@ open class DKImagePickerController : UINavigationController {
         self.present(self.createCamera(), animated: true, completion: nil)
     }
     
-    open func dismiss() {
+    @objc open func dismiss() {
         self.dismiss(animated: true)
     }
     
@@ -423,9 +427,9 @@ open class DKImagePickerController : UINavigationController {
         })
     }
     
-    open func done() {
+    @objc open func done() {
+        self.didSelectAssets?(self.selectedAssets)
         self.presentingViewController?.dismiss(animated: true, completion: {
-            self.didSelectAssets?(self.selectedAssets)
         })
     }
     
